@@ -1,0 +1,14 @@
+package com.darcytech.training.web;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class IndexController {
+
+    @RequestMapping("index1")
+    public String index() {
+        return "redirect:/index.html";
+    }
+
+}

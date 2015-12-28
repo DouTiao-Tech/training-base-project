@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration scan="true">
+
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder charset="UTF-8">
+            <pattern>%d{HH:mm:ss.SSS} [%thread][%logger{0}][%X{user}] %-5level - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="stdout"/>
+    </root>
+
+    <logger name="com.darcytech" level="DEBUG"/>
+
+    <logger name="org.springframework" level="WARN"/>
+    <!--<logger name="org.springframework.transaction.interceptor" level="TRACE" />-->
+
+    <logger name="org.hibernate" level="WARN"/>
+
+    <logger name="org.hibernate.SQL" level="DEBUG"/>
+
+</configuration>
