@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -20,7 +21,7 @@ import com.darcytech.training.catalog.model.Server;
 
 @Configuration
 @EnableJpaRepositories(
-        entityManagerFactoryRef = CatalogRepositoryConfig.EMF_NAME,
+        entityManagerFactoryRef = "catalogEntityManagerFactory",
         transactionManagerRef = CatalogRepositoryConfig.TX_MANAGER_NAME
 )
 public class CatalogRepositoryConfig {
@@ -29,12 +30,10 @@ public class CatalogRepositoryConfig {
 
     public static final String TX_MANAGER_NAME = "catalogTransactionManager";
 
-    public static final String EMF_NAME = "catalogEntityManagerFactory";
-
     @Bean
     @ConditionalOnMissingBean(name = "catalogDataSource")
     @Qualifier(CatalogRepositoryConfig.UNIT_NAME)
-    @ConfigurationProperties(prefix = "catalog.datasource")
+    @ConfigurationProperties(prefix = "datasource.catalog")
     @Primary
     public DataSource catalogDataSource() {
         return new org.apache.tomcat.jdbc.pool.DataSource();
@@ -56,6 +55,12 @@ public class CatalogRepositoryConfig {
                 .persistenceUnit(UNIT_NAME)
                 .properties(jpaProperties.getHibernateProperties(catalogDataSource))
                 .build();
+    }
+
+    @Bean
+    @Qualifier(UNIT_NAME)
+    public JdbcTemplate catalogJdbcTemplate(@Qualifier(UNIT_NAME) DataSource catalogDataSource) {
+        return new JdbcTemplate(catalogDataSource);
     }
 
 }
