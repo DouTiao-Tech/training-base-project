@@ -5,8 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.darcytech.training.catalog.model.Server;
-
 public class ServerDaoTest extends AbstractCatalogDaoTest {
 
     @Autowired
@@ -14,7 +12,8 @@ public class ServerDaoTest extends AbstractCatalogDaoTest {
 
     @Before
     public void setUp() throws Exception {
-        serverDao.saveAndFlush(new Server(10));
+        jdbcTemplate.execute("insert into server(id, dbHost, dbPort, dbUsername, dbPassword)" +
+                " values(1, '192.168.100.10', 3306, 'darcy', '123456')");
     }
 
     @Test

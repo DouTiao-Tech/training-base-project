@@ -1,7 +1,6 @@
 package com.darcytech.training.catalog;
 
-import javax.sql.DataSource;
-
+import org.apache.tomcat.jdbc.pool.DataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
@@ -17,6 +16,7 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import com.darcytech.training.catalog.dao.ServerDao;
 import com.darcytech.training.catalog.model.Server;
 
 @Configuration
@@ -32,21 +32,25 @@ public class CatalogRepositoryConfig {
 
     @Bean
     @ConditionalOnMissingBean(name = "catalogDataSource")
-    @Qualifier(CatalogRepositoryConfig.UNIT_NAME)
     @ConfigurationProperties(prefix = "datasource.catalog")
+    @Qualifier(UNIT_NAME)
     @Primary
     public DataSource catalogDataSource() {
-        return new org.apache.tomcat.jdbc.pool.DataSource();
+        return new DataSource();
     }
 
     @Bean
-    public PlatformTransactionManager catalogTransactionManager(@Qualifier("catalog") DataSource catalogDataSource) {
+    @Qualifier(UNIT_NAME)
+    @Primary
+    public PlatformTransactionManager catalogTransactionManager(@Qualifier(UNIT_NAME) DataSource catalogDataSource) {
         JpaTransactionManager transactionManager = new JpaTransactionManager();
         transactionManager.setPersistenceUnitName(UNIT_NAME);
         return transactionManager;
     }
 
     @Bean
+    @Qualifier(UNIT_NAME)
+    @Primary
     public LocalContainerEntityManagerFactoryBean catalogEntityManagerFactory(
             @Qualifier(CatalogRepositoryConfig.UNIT_NAME) DataSource catalogDataSource,
             EntityManagerFactoryBuilder builder, JpaProperties jpaProperties) {
@@ -59,8 +63,14 @@ public class CatalogRepositoryConfig {
 
     @Bean
     @Qualifier(UNIT_NAME)
+    @Primary
     public JdbcTemplate catalogJdbcTemplate(@Qualifier(UNIT_NAME) DataSource catalogDataSource) {
         return new JdbcTemplate(catalogDataSource);
+    }
+
+    @Bean
+    public ServerDao serverDao(@Qualifier(UNIT_NAME) JdbcTemplate jdbcTemplate) {
+        return new ServerDao(jdbcTemplate);
     }
 
 }

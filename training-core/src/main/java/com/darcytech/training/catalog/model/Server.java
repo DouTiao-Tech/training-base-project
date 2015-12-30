@@ -4,25 +4,26 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 import com.darcytech.training.base.BaseJpaModel;
+import com.darcytech.training.base.JdbcServer;
 
 @Entity
-public class Server extends BaseJpaModel<Integer> {
+public class Server extends BaseJpaModel<Integer> implements JdbcServer {
 
     @Id
     private Integer id;
 
-    private String host;
+    private String dbHost;
 
-    private int port;
+    private int dbPort;
 
-    private String database;
+    private String dbName;
 
-    private String username;
+    private String dbUsername;
 
-    private String password;
+    private String dbPassword;
 
-    private Server() {
-        // used by hibernate
+    public Server() {
+        // used by spring jdbc
     }
 
     public Server(Integer id) {
@@ -38,53 +39,68 @@ public class Server extends BaseJpaModel<Integer> {
         this.id = id;
     }
 
-    public String getHost() {
-        return host;
+    public String getDbHost() {
+        return dbHost;
     }
 
-    public void setHost(String host) {
-        this.host = host;
+    public void setDbHost(String dbHost) {
+        this.dbHost = dbHost;
     }
 
-    public int getPort() {
-        return port;
+    public int getDbPort() {
+        return dbPort;
     }
 
-    public void setPort(int port) {
-        this.port = port;
+    public void setDbPort(int dbPort) {
+        this.dbPort = dbPort;
     }
 
-    public String getDatabase() {
-        return database;
+    public String getDbName() {
+        return dbName;
     }
 
-    public void setDatabase(String database) {
-        this.database = database;
+    public void setDbName(String dbName) {
+        this.dbName = dbName;
     }
 
-    public String getUsername() {
-        return username;
+    public String getDbUsername() {
+        return dbUsername;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setDbUsername(String dbUsername) {
+        this.dbUsername = dbUsername;
     }
 
-    public String getPassword() {
-        return password;
+    public String getDbPassword() {
+        return dbPassword;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setDbPassword(String dbPassword) {
+        this.dbPassword = dbPassword;
     }
 
     public String getJdbcUrl() {
-        return "jdbc:mysql://" + getHost() + ":" + getPort() + "/" + getDatabase();
+        return "jdbc:mysql://" + getDbHost() + ":" + getDbPort() + "/" + getDbName();
     }
 
     @Override
     public String toString() {
         return getJdbcUrl();
+    }
+
+    @Override
+    public String getUrl() {
+        return getJdbcUrl();
+    }
+
+    @Override
+    public String getUsername() {
+        return getDbUsername();
+    }
+
+    @Override
+    public String getPassword() {
+        return getDbPassword();
     }
 
 }

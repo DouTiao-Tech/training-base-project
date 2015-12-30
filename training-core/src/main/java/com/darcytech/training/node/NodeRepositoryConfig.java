@@ -2,7 +2,6 @@ package com.darcytech.training.node;
 
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
@@ -30,13 +29,10 @@ public class NodeRepositoryConfig {
 
     public static final String TX_MANAGER_NAME = "nodeTransactionManager";
 
-    @Autowired
-    private ServerDao serverDao;
-
     @Bean
     @ConditionalOnMissingBean(name = "nodeDataSource")
-    @Qualifier(NodeRepositoryConfig.UNIT_NAME)
-    public DataSource nodeDataSource() {
+    @Qualifier(UNIT_NAME)
+    public DataSource nodeDataSource(ServerDao serverDao) {
         return new DataSourceRouter(serverDao.findAll());
     }
 

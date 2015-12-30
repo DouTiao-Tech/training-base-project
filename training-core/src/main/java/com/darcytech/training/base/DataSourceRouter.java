@@ -12,25 +12,24 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 import org.springframework.validation.BindException;
 
-import com.darcytech.training.catalog.model.Server;
 import com.darcytech.training.node.ServerSelector;
 
 public class DataSourceRouter extends AbstractRoutingDataSource implements ServerSelector {
 
     private final ThreadLocal<Object> selectedServer = new ThreadLocal<>();
 
-    private final List<Server> servers;
+    private final List<? extends JdbcServer> servers;
 
     private final String configPrefix;
 
     @Autowired
     private ConfigurableEnvironment environment;
 
-    public DataSourceRouter(List<Server> servers) {
+    public DataSourceRouter(List<? extends JdbcServer> servers) {
         this(servers, "datasource.node");
     }
 
-    public DataSourceRouter(List<Server> servers, String configPrefix) {
+    public DataSourceRouter(List<? extends JdbcServer> servers, String configPrefix) {
         this.servers = servers;
         this.configPrefix = configPrefix;
     }
@@ -54,11 +53,11 @@ public class DataSourceRouter extends AbstractRoutingDataSource implements Serve
         super.afterPropertiesSet();
     }
 
-    public Map<Object, Object> buildDataSources(List<Server> servers) {
+    public Map<Object, Object> buildDataSources(List<? extends JdbcServer> servers) {
         Map<Object, Object> dataSources = new HashMap<>(servers.size());
-        for (Server s : servers) {
+        for (JdbcServer s : servers) {
             DataSourceBuilder factory = DataSourceBuilder.create()
-                    .url(s.getJdbcUrl())
+                    .url(s.getUrl())
                     .username(s.getUsername())
                     .password(s.getPassword());
             dataSources.put(s.getId(), bindProperties(factory.build()));

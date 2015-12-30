@@ -1,8 +1,23 @@
 package com.darcytech.training.catalog.dao;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.List;
+
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.darcytech.training.catalog.model.Server;
 
-public interface ServerDao extends JpaRepository<Server, Integer> {
+public class ServerDao {
+
+    private final JdbcTemplate jdbcTemplate;
+
+    public ServerDao(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    public List<Server> findAll() {
+        BeanPropertyRowMapper<Server> mapper = new BeanPropertyRowMapper<>(Server.class);
+        return jdbcTemplate.query("select id, db_host, db_port, db_username, db_password from server", mapper);
+    }
+
 }

@@ -4,12 +4,18 @@ import java.util.Collections;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.web.filter.ShallowEtagHeaderFilter;
 
-@SpringBootApplication
+import com.darcytech.training.catalog.CatalogRepositoryConfig;
+import com.darcytech.training.node.NodeRepositoryConfig;
+
+@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
+@Import({CatalogRepositoryConfig.class, NodeRepositoryConfig.class})
 public class WebMain {
 
     public static void main(String[] args) {
