@@ -9,6 +9,7 @@ import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -20,6 +21,7 @@ import com.darcytech.training.catalog.dao.ServerDao;
 import com.darcytech.training.node.model.Trade;
 
 @Configuration
+@EnableJpaAuditing
 @EnableJpaRepositories(
         entityManagerFactoryRef = "nodeEntityManagerFactory",
         transactionManagerRef = NodeRepositoryConfig.TX_MANAGER_NAME)

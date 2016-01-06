@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import com.darcytech.training.base.BaseJpaModel;
@@ -15,7 +16,7 @@ public class Trade extends BaseJpaModel<Long> {
     @Id
     private Long id;
 
-    @LastModifiedDate
+    @CreatedDate
     private LocalDateTime createTime;
 
     @LastModifiedDate
@@ -24,6 +25,13 @@ public class Trade extends BaseJpaModel<Long> {
     private String buyerNick;
 
     private int payment;
+
+    public Trade() {
+    }
+
+    public Trade(long id) {
+        this.id = id;
+    }
 
     public String getBuyerNick() {
         return buyerNick;

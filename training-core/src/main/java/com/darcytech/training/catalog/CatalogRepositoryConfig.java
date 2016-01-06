@@ -1,6 +1,7 @@
 package com.darcytech.training.catalog;
 
-import org.apache.tomcat.jdbc.pool.DataSource;
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
@@ -10,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -20,6 +22,7 @@ import com.darcytech.training.catalog.dao.ServerDao;
 import com.darcytech.training.catalog.model.Server;
 
 @Configuration
+@EnableJpaAuditing
 @EnableJpaRepositories(
         entityManagerFactoryRef = "catalogEntityManagerFactory",
         transactionManagerRef = CatalogRepositoryConfig.TX_MANAGER_NAME
@@ -36,7 +39,7 @@ public class CatalogRepositoryConfig {
     @Qualifier(UNIT_NAME)
     @Primary
     public DataSource catalogDataSource() {
-        return new DataSource();
+        return new org.apache.tomcat.jdbc.pool.DataSource();
     }
 
     @Bean
