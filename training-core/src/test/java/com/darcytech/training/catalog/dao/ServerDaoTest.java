@@ -12,7 +12,7 @@ public class ServerDaoTest extends AbstractCatalogDaoTest {
 
     @Before
     public void setUp() throws Exception {
-        jdbcTemplate.execute("insert into server(id, dbHost, dbPort, dbUsername, dbPassword)" +
+        jdbcTemplate.execute("insert into server(id, db_host, db_port, db_username, db_password)" +
                 " values(1, '192.168.100.10', 3306, 'darcy', '123456')");
     }
 

@@ -17,7 +17,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.darcytech.training.base.DataSourceRouter;
-import com.darcytech.training.catalog.dao.ServerDao;
+import com.darcytech.training.catalog.dao.ServerDaoJdbc;
 import com.darcytech.training.node.model.Trade;
 
 @Configuration
@@ -31,11 +31,13 @@ public class NodeRepositoryConfig {
 
     public static final String TX_MANAGER_NAME = "nodeTransactionManager";
 
+    public static JdbcTemplate jdbcTemplate;
+
     @Bean
     @ConditionalOnMissingBean(name = "nodeDataSource")
     @Qualifier(UNIT_NAME)
-    public DataSource nodeDataSource(ServerDao serverDao) {
-        return new DataSourceRouter(serverDao.findAll());
+    public DataSource nodeDataSource(ServerDaoJdbc serverDaoJdbc) {
+        return new DataSourceRouter(serverDaoJdbc.findAll());
     }
 
     @Bean
@@ -60,7 +62,8 @@ public class NodeRepositoryConfig {
     @Bean
     @Qualifier(UNIT_NAME)
     public JdbcTemplate nodeJdbcTemplate(@Qualifier(UNIT_NAME) DataSource nodeDataSource) {
-        return new JdbcTemplate(nodeDataSource);
+        jdbcTemplate = new JdbcTemplate(nodeDataSource);
+        return jdbcTemplate;
     }
 
 }

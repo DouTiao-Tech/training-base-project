@@ -13,14 +13,14 @@ public class ShopDailyVisit extends BaseJpaModel<ShopDailyId> {
     @EmbeddedId
     private ShopDailyId id;
 
-    private int count;
+    private int userCount;
 
     public ShopDailyVisit() {
     }
 
-    public ShopDailyVisit(long userId, LocalDate day, int count) {
+    public ShopDailyVisit(long userId, LocalDate day, int userCount) {
         this.id = new ShopDailyId(userId, day);
-        this.count = count;
+        this.userCount = userCount;
     }
 
     @Override
@@ -32,12 +32,12 @@ public class ShopDailyVisit extends BaseJpaModel<ShopDailyId> {
         this.id = id;
     }
 
-    public int getCount() {
-        return count;
+    public int getUserCount() {
+        return userCount;
     }
 
-    public void setCount(int count) {
-        this.count = count;
+    public void setUserCount(int userCount) {
+        this.userCount = userCount;
     }
 
 }

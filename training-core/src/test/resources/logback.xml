@@ -12,13 +12,4 @@
         <appender-ref ref="stdout"/>
     </root>
 
-    <logger name="com.darcytech" level="DEBUG"/>
-
-    <logger name="org.springframework" level="WARN"/>
-    <!--<logger name="org.springframework.transaction.interceptor" level="TRACE" />-->
-
-    <logger name="org.hibernate" level="WARN"/>
-
-    <logger name="org.hibernate.SQL" level="DEBUG"/>
-
 </configuration>

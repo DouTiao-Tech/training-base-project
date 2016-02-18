@@ -18,7 +18,7 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import com.darcytech.training.catalog.dao.ServerDao;
+import com.darcytech.training.catalog.dao.ServerDaoJdbc;
 import com.darcytech.training.catalog.model.Server;
 
 @Configuration
@@ -72,8 +72,8 @@ public class CatalogRepositoryConfig {
     }
 
     @Bean
-    public ServerDao serverDao(@Qualifier(UNIT_NAME) JdbcTemplate jdbcTemplate) {
-        return new ServerDao(jdbcTemplate);
+    public ServerDaoJdbc serverDaoJdbc(@Qualifier(UNIT_NAME) JdbcTemplate jdbcTemplate) {
+        return new ServerDaoJdbc(jdbcTemplate);
     }
 
 }

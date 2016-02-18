@@ -9,16 +9,19 @@ import com.google.common.base.Objects;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class BaseJpaModel<T> {
+public abstract class BaseJpaModel<ID> {
 
-    public abstract T getId();
+    public abstract ID getId();
 
     @Override
     public boolean equals(Object o) {
-        if (this == o)
+        if (this == o) {
             return true;
-        if (o == null || getClass() != o.getClass())
+        }
+        if (o == null || getClass().isAssignableFrom(o.getClass()) == false
+                && o.getClass().isAssignableFrom(getClass()) == false) {
             return false;
+        }
         BaseJpaModel<?> baseModel = (BaseJpaModel<?>) o;
         return Objects.equal(getId(), baseModel.getId());
     }

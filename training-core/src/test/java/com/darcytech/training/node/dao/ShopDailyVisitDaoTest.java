@@ -25,4 +25,14 @@ public class ShopDailyVisitDaoTest extends AbstractNodeDaoTest {
         Assert.assertEquals(1, countRowsInTable("shop_daily_visit"));
     }
 
+    @Test
+    public void countObjects() throws Exception {
+        Assert.assertEquals(1, shopDailyVisitDao.countObjects());
+    }
+
+    @Test
+    public void findByUserCount() throws Exception {
+        shopDailyVisitDao.findByUserCount(10);
+
+    }
 }
