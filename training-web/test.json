@@ -1,0 +1,334 @@
+{
+  "size": 0,
+  "post_filter": {
+    "bool": {
+      "must": [
+        {
+          "term": {
+            "userId": 1667361675
+          }
+        },
+        {
+          "bool": {
+            "must": [
+              {
+                "bool": {
+                  "must": [
+                    {
+                      "bool": {
+                        "should": [
+                          {
+                            "bool": {
+                              "must_not": {
+                                "exists": {
+                                  "field": "receiveSms"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "term": {
+                              "receiveSms": true
+                            }
+                          }
+                        ],
+                        "minimum_should_match": "1"
+                      }
+                    },
+                    {
+                      "bool": {
+                        "should": [
+                          {
+                            "bool": {
+                              "must_not": {
+                                "exists": {
+                                  "field": "inBlacklist"
+                                }
+                              }
+                            }
+                          },
+                          {
+                            "term": {
+                              "inBlacklist": false
+                            }
+                          }
+                        ],
+                        "minimum_should_match": "1"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "nested": {
+                  "query": {
+                    "bool": {
+                      "must": [
+                        {
+                          "bool": {
+                            "should": [
+                              {
+                                "term": {
+                                  "trades.orders.itemId": 521868362691
+                                }
+                              },
+                              {
+                                "term": {
+                                  "trades.orders.itemId": 522971883089
+                                }
+                              },
+                              {
+                                "term": {
+                                  "trades.orders.itemId": 35452939939
+                                }
+                              },
+                              {
+                                "term": {
+                                  "trades.orders.itemId": 522999275993
+                                }
+                              },
+                              {
+                                "term": {
+                                  "trades.orders.itemId": 525797357589
+                                }
+                              },
+                              {
+                                "term": {
+                                  "trades.orders.itemId": 522166337213
+                                }
+                              },
+                              {
+                                "term": {
+                                  "trades.orders.itemId": 526583638598
+                                }
+                              },
+                              {
+                                "term": {
+                                  "trades.orders.itemId": 523000959323
+                                }
+                              },
+                              {
+                                "term": {
+                                  "trades.orders.itemId": 524328951285
+                                }
+                              },
+                              {
+                                "term": {
+                                  "trades.orders.itemId": 521543537984
+                                }
+                              },
+                              {
+                                "term": {
+                                  "trades.orders.itemId": 523027940959
+                                }
+                              },
+                              {
+                                "term": {
+                                  "trades.orders.itemId": 522146811241
+                                }
+                              },
+                              {
+                                "term": {
+                                  "trades.orders.itemId": 524365714927
+                                }
+                              },
+                              {
+                                "term": {
+                                  "trades.orders.itemId": 522164693236
+                                }
+                              },
+                              {
+                                "term": {
+                                  "trades.orders.itemId": 522191806917
+                                }
+                              },
+                              {
+                                "term": {
+                                  "trades.orders.itemId": 522994081827
+                                }
+                              },
+                              {
+                                "term": {
+                                  "trades.orders.itemId": 42422846105
+                                }
+                              },
+                              {
+                                "term": {
+                                  "trades.orders.itemId": 526592489228
+                                }
+                              },
+                              {
+                                "term": {
+                                  "trades.orders.itemId": 522993813846
+                                }
+                              },
+                              {
+                                "term": {
+                                  "trades.orders.itemId": 522012938986
+                                }
+                              },
+                              {
+                                "term": {
+                                  "trades.orders.itemId": 522591095209
+                                }
+                              },
+                              {
+                                "term": {
+                                  "trades.orders.itemId": 522146303136
+                                }
+                              }
+                            ],
+                            "minimum_should_match": "1"
+                          }
+                        },
+                        {
+                          "range": {
+                            "trades.createdTime": {
+                              "from": 1448939160000,
+                              "to": null,
+                              "include_lower": true,
+                              "include_upper": true
+                            }
+                          }
+                        },
+                        {
+                          "range": {
+                            "trades.createdTime": {
+                              "from": null,
+                              "to": 1454209560000,
+                              "include_lower": true,
+                              "include_upper": true
+                            }
+                          }
+                        },
+                        {
+                          "range": {
+                            "trades.payTime": {
+                              "from": 1448939160000,
+                              "to": null,
+                              "include_lower": true,
+                              "include_upper": true
+                            }
+                          }
+                        },
+                        {
+                          "range": {
+                            "trades.payTime": {
+                              "from": null,
+                              "to": 1454209560000,
+                              "include_lower": true,
+                              "include_upper": true
+                            }
+                          }
+                        },
+                        {
+                          "range": {
+                            "trades.consignTime": {
+                              "from": 1448939160000,
+                              "to": null,
+                              "include_lower": true,
+                              "include_upper": true
+                            }
+                          }
+                        },
+                        {
+                          "range": {
+                            "trades.consignTime": {
+                              "from": null,
+                              "to": 1454209560000,
+                              "include_lower": true,
+                              "include_upper": true
+                            }
+                          }
+                        },
+                        {
+                          "term": {
+                            "trades.status": "TRADE_FINISHED"
+                          }
+                        },
+                        {
+                          "range": {
+                            "trades.endTime": {
+                              "from": 1448939160000,
+                              "to": null,
+                              "include_lower": true,
+                              "include_upper": true
+                            }
+                          }
+                        },
+                        {
+                          "range": {
+                            "trades.endTime": {
+                              "from": null,
+                              "to": 1454209560000,
+                              "include_lower": true,
+                              "include_upper": true
+                            }
+                          }
+                        },
+                        {
+                          "range": {
+                            "trades.payment": {
+                              "from": "1",
+                              "to": null,
+                              "include_lower": true,
+                              "include_upper": true
+                            }
+                          }
+                        },
+                        {
+                          "range": {
+                            "trades.payment": {
+                              "from": null,
+                              "to": "1000",
+                              "include_lower": true,
+                              "include_upper": true
+                            }
+                          }
+                        },
+                        {
+                          "range": {
+                            "trades.itemNum": {
+                              "from": 1,
+                              "to": null,
+                              "include_lower": true,
+                              "include_upper": true
+                            }
+                          }
+                        },
+                        {
+                          "range": {
+                            "trades.itemNum": {
+                              "from": null,
+                              "to": 10,
+                              "include_lower": true,
+                              "include_upper": true
+                            }
+                          }
+                        },
+                        {
+                          "bool": {
+                            "must": {
+                              "bool": {
+                                "must_not": {
+                                  "term": {
+                                    "trades.sellerFlag": 5
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "path": "trades"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
