@@ -17,6 +17,7 @@
     <modules>
         <module>training-core</module>
         <module>training-web</module>
+        <module>training-api</module>
     </modules>
 
     <properties>

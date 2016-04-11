@@ -13,19 +13,19 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import com.darcytech.training.catalog.dao.ServerDaoJdbc;
+import com.darcytech.training.base.EnhancedJpaRepository;
 import com.darcytech.training.catalog.model.Server;
 
 @Configuration
 @EnableJpaAuditing
 @EnableJpaRepositories(
         entityManagerFactoryRef = "catalogEntityManagerFactory",
-        transactionManagerRef = CatalogRepositoryConfig.TX_MANAGER_NAME
+        transactionManagerRef = CatalogRepositoryConfig.TX_MANAGER_NAME,
+        repositoryBaseClass = EnhancedJpaRepository.class
 )
 public class CatalogRepositoryConfig {
 
@@ -62,18 +62,6 @@ public class CatalogRepositoryConfig {
                 .persistenceUnit(UNIT_NAME)
                 .properties(jpaProperties.getHibernateProperties(catalogDataSource))
                 .build();
-    }
-
-    @Bean
-    @Qualifier(UNIT_NAME)
-    @Primary
-    public JdbcTemplate catalogJdbcTemplate(@Qualifier(UNIT_NAME) DataSource catalogDataSource) {
-        return new JdbcTemplate(catalogDataSource);
-    }
-
-    @Bean
-    public ServerDaoJdbc serverDaoJdbc(@Qualifier(UNIT_NAME) JdbcTemplate jdbcTemplate) {
-        return new ServerDaoJdbc(jdbcTemplate);
     }
 
 }

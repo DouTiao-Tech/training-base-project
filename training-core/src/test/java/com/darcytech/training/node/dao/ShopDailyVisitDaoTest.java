@@ -18,6 +18,10 @@ public class ShopDailyVisitDaoTest extends AbstractNodeDaoTest {
     public void setUp() throws Exception {
         ShopDailyVisit visit = new ShopDailyVisit(10L, LocalDate.of(2015, 10, 2), 10);
         shopDailyVisitDao.saveAndFlush(visit);
+        visit.setUserCount(100);
+        shopDailyVisitDao.saveAndFlush(visit);
+        detach(visit);
+        shopDailyVisitDao.saveAndFlush(visit);
     }
 
     @Test

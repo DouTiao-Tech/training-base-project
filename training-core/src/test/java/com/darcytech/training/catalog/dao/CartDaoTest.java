@@ -22,6 +22,8 @@ public class CartDaoTest extends AbstractCatalogDaoTest {
     @Autowired
     private CustomerDao customerDao;
 
+    private Cart cart;
+
     @Before
     public void setUp() throws Exception {
 
@@ -42,18 +44,19 @@ public class CartDaoTest extends AbstractCatalogDaoTest {
         cartDao.save(Arrays.asList(cart, cart2));
 
         flushAndClear();
+
+        this.cart = cart;
     }
 
     @Test
     public void findAll() throws Exception {
         Cart cart = Iterables.getFirst(cartDao.findAll(), null);
         Assert.assertNotNull(cart);
-        Customer customer = cart.getCustomer();
-        System.out.println(customer.getClass());
-        System.out.println(customer.getName());
+    }
 
-        List<ItemOrder> orders = cart.getOrders();
-        System.out.println(orders.size());
+    @Test
+    public void findIdByCreatedTime() {
+        cartDao.findPaymentsByCreatedTime(cart.getCreatedTime());
     }
 
 }

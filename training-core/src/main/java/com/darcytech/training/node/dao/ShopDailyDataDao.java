@@ -10,7 +10,6 @@ import com.darcytech.training.node.model.ShopDailyData;
 import com.darcytech.training.node.model.ShopDailyData_;
 import com.darcytech.training.node.model.ShopDailyId;
 
-import static com.darcytech.training.node.NodeRepositoryConfig.jdbcTemplate;
 
 public interface ShopDailyDataDao extends BaseJpaRepository<ShopDailyData, ShopDailyId> {
 
@@ -23,7 +22,7 @@ public interface ShopDailyDataDao extends BaseJpaRepository<ShopDailyData, ShopD
     }
 
     default int count1() {
-        return jdbcTemplate.queryForObject("", Integer.class);
+        return getJdbcTemplate().queryForObject("", Integer.class);
     }
 
 }

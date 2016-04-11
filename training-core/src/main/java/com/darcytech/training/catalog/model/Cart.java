@@ -2,6 +2,7 @@ package com.darcytech.training.catalog.model;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -14,6 +15,7 @@ import javax.persistence.OneToMany;
 import org.springframework.data.annotation.CreatedDate;
 
 import com.darcytech.training.base.BaseJpaModel;
+import com.google.common.collect.Iterables;
 
 @Entity
 public class Cart extends BaseJpaModel<Long> {
@@ -81,4 +83,13 @@ public class Cart extends BaseJpaModel<Long> {
     public void setOrders(List<ItemOrder> orders) {
         this.orders = orders;
     }
+
+    public static List<Customer> extractCustomers(List<Cart> carts) {
+        return carts.stream().map(Cart::getCustomer).collect(Collectors.toList());
+    }
+
+    public static Iterable<ItemOrder> extractOrders(Iterable<Cart> carts) {
+        return Iterables.concat(Iterables.transform(carts, Cart::getOrders));
+    }
+
 }

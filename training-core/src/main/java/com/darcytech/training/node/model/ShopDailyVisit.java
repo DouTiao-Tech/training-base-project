@@ -1,9 +1,12 @@
 package com.darcytech.training.node.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+
+import org.springframework.data.annotation.LastModifiedDate;
 
 import com.darcytech.training.base.BaseJpaModel;
 
@@ -12,6 +15,9 @@ public class ShopDailyVisit extends BaseJpaModel<ShopDailyId> {
 
     @EmbeddedId
     private ShopDailyId id;
+
+    @LastModifiedDate
+    private LocalDateTime lastModified;
 
     private int userCount;
 
@@ -40,4 +46,11 @@ public class ShopDailyVisit extends BaseJpaModel<ShopDailyId> {
         this.userCount = userCount;
     }
 
+    public LocalDateTime getLastModified() {
+        return lastModified;
+    }
+
+    public void setLastModified(LocalDateTime lastModified) {
+        this.lastModified = lastModified;
+    }
 }
