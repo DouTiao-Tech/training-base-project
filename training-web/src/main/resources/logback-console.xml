@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<configuration scan="true">
+<configuration scan="true" scanInterval="30 seconds">
 
     <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
         <encoder charset="UTF-8">
@@ -12,7 +12,8 @@
         <appender-ref ref="stdout"/>
     </root>
 
-    <!--<logger name="org.hibernate" level="TRACE"/>-->
+    <!-- <logger name="org.hibernate" level="TRACE"/> -->
     <logger name="org.springframework.jdbc" level="DEBUG"/>
+    <logger name="org.hibernate.SQL" level="DEBUG"/>
 
 </configuration>
