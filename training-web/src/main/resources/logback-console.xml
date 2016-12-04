@@ -12,8 +12,13 @@
         <appender-ref ref="stdout"/>
     </root>
 
-    <!-- <logger name="org.hibernate" level="TRACE"/> -->
+    <!-- 查看 jdbc template 生成的 SQL 日志 -->
     <logger name="org.springframework.jdbc" level="DEBUG"/>
+
+    <!-- 查看 hibernate 生成的 SQL 日志 -->
     <logger name="org.hibernate.SQL" level="DEBUG"/>
+
+    <!-- 生成环境建议将此项设置为 ERROR，这样就不会执行 SHOW WARNINGS 语句 -->
+    <logger name="org.hibernate.engine.jdbc.spi.SqlExceptionHelper" level="DEBUG"/>
 
 </configuration>
