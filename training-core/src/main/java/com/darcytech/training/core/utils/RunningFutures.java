@@ -26,7 +26,7 @@ public class RunningFutures<K> {
                 registeredFutures.remove(k);
             }
         });
-        return StreamUtils.reject(values, v->{
+        return Streams2.reject(values, v->{
             K key = keyFn.apply(v);
             Future<?> f = registeredFutures.get(key);
             return f != null && f.isDone() == false;

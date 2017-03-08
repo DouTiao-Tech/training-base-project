@@ -1,5 +1,6 @@
 package com.darcytech.training.core.catalog.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,12 +24,12 @@ import com.google.common.collect.Iterables;
 public class Cart extends BaseJpaModel<Long> {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    private String name;
+    private String name;
 
-    @ManyToOne(fetch= FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Customer customer;
 
     @CreatedDate
@@ -36,6 +37,8 @@ public class Cart extends BaseJpaModel<Long> {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cart")
     private List<ItemOrder> orders;
+
+    private BigDecimal payment;
 
     public Cart() {
     }
@@ -80,6 +83,22 @@ public class Cart extends BaseJpaModel<Long> {
 
     public void setOrders(List<ItemOrder> orders) {
         this.orders = orders;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public BigDecimal getPayment() {
+        return payment;
+    }
+
+    public void setPayment(BigDecimal payment) {
+        this.payment = payment;
     }
 
     public static List<Customer> extractCustomers(List<Cart> carts) {

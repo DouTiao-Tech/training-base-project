@@ -6,7 +6,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +14,6 @@ public class TrainingTaobaoClient {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Retryable(exclude = {NullPointerException.class})
     @Cacheable("trades")
     @Transactional
     public List<Long> findTrade(Long tid) {

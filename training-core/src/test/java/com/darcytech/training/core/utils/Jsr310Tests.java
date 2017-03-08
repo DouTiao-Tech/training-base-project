@@ -50,4 +50,12 @@ public class Jsr310Tests {
         long days = today.until(daysLater, ChronoUnit.DAYS);
         Assert.assertEquals(34, days);
     }
+
+    @Test
+    public void until() throws Exception {
+        LocalDateTime time1 = LocalDateTime.of(2016, 1, 10, 10, 10, 5);
+        LocalDateTime time2 = LocalDateTime.of(2016, 1, 10, 10, 30, 20);
+        Assert.assertEquals(20, time1.until(time2, ChronoUnit.MINUTES));
+    }
+
 }

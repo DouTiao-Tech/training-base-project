@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import static com.darcytech.training.core.utils.StreamUtils.map;
+import static com.darcytech.training.core.utils.Streams2.map;
 
 @Component
 public class RdsTradeSyncScheduler {

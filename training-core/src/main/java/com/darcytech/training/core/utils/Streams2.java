@@ -9,7 +9,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class StreamUtils {
+public class Streams2 {
 
     public static <T> List<T> filter(Collection<T> unfiltered, Predicate<T> predicate) {
         return unfiltered.stream().filter(predicate).collect(Collectors.toList());

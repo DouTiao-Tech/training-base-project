@@ -12,6 +12,8 @@ import com.darcytech.training.core.base.BaseJpaRepository;
 import com.darcytech.training.core.node.model.Trade_;
 import com.darcytech.training.core.node.model.Trade;
 
+import static com.darcytech.training.core.base.EnhancedJpaRepository.le;
+
 public interface TradeDao extends BaseJpaRepository<Trade, Long> {
 
     default Page<Trade> findByCreateTime(LocalDateTime createTime, Pageable pageable) {
