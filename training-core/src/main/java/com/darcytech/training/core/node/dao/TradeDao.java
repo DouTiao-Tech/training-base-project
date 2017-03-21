@@ -12,7 +12,7 @@ import com.darcytech.training.core.base.BaseJpaRepository;
 import com.darcytech.training.core.node.model.Trade_;
 import com.darcytech.training.core.node.model.Trade;
 
-import static com.darcytech.training.core.base.EnhancedJpaRepository.le;
+import static com.darcytech.training.core.base.BaseJpaRepository.le;
 
 public interface TradeDao extends BaseJpaRepository<Trade, Long> {
 

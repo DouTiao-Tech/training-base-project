@@ -19,6 +19,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import com.darcytech.training.core.base.EnhancedJpaRepository;
+import com.darcytech.training.core.base.EnhancedJpaRepositoryFactoryBean;
 import com.darcytech.training.core.catalog.model.Server;
 import com.darcytech.training.core.catalog.service.CustomerService;
 
@@ -27,7 +28,8 @@ import com.darcytech.training.core.catalog.service.CustomerService;
 @EnableJpaRepositories(
         entityManagerFactoryRef = "catalogEntityManagerFactory",
         transactionManagerRef = CatalogRepositoryConfig.TX_MANAGER_NAME,
-        repositoryBaseClass = EnhancedJpaRepository.class
+        repositoryBaseClass = EnhancedJpaRepository.class,
+        repositoryFactoryBeanClass = EnhancedJpaRepositoryFactoryBean.class
 )
 @ComponentScan(basePackageClasses = CustomerService.class)
 public class CatalogRepositoryConfig {

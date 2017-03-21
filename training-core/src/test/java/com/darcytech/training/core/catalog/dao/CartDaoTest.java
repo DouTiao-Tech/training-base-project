@@ -56,10 +56,10 @@ public class CartDaoTest extends AbstractCatalogDaoTest {
 
     @Test
     public void findAll() throws Exception {
-//        Cart cart1 = cartDao.findOne(cart.getId());
+        //        Cart cart1 = cartDao.findOne(cart.getId());
         Cart cart = Iterables.getFirst(cartDao.findAll(), null);
         Assert.assertNotNull(cart);
-//        Assert.assertSame(cart1, cart);
+        //        Assert.assertSame(cart1, cart);
     }
 
     @Test
@@ -80,7 +80,7 @@ public class CartDaoTest extends AbstractCatalogDaoTest {
 
     @Test
     public void name() throws Exception {
-        Map<String, Object> params = ImmutableMap.of("ids", Arrays.asList(1,2));
+        Map<String, Object> params = ImmutableMap.of("ids", Arrays.asList(1, 2));
         customerDao.getNamedParameterJdbcTemplate().queryForList("select * from customer where name in (:ids)", params);
     }
 

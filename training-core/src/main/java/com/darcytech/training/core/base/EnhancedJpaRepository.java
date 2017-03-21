@@ -1,42 +1,45 @@
 package com.darcytech.training.core.base;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.JoinType;
-import javax.persistence.criteria.Path;
-import javax.persistence.metamodel.SingularAttribute;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.sql.DataSource;
 
+import org.hibernate.Session;
 import org.hibernate.engine.jdbc.connections.internal.DatasourceConnectionProviderImpl;
 import org.hibernate.engine.jdbc.connections.spi.ConnectionProvider;
 import org.hibernate.internal.SessionFactoryImpl;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.transaction.annotation.Propagation;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.darcytech.training.core.base.BaseJpaRepository.exp;
+
+@Repository
+@Transactional(readOnly = true)
 public class EnhancedJpaRepository<T, ID extends Serializable> extends SimpleJpaRepository<T, ID> {
 
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
+
+    private final JpaEntityInformation<T, ?> entityInformation;
 
     public EnhancedJpaRepository(JpaEntityInformation<T, ?> entityInformation, EntityManager entityManager) {
         super(entityInformation, entityManager);
         this.entityManager = entityManager;
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(getDataSource(entityManager));
+        this.entityInformation = entityInformation;
     }
 
-    public EnhancedJpaRepository(Class<T> domainClass, EntityManager em) {
-        super(domainClass, em);
-    }
-
-    @Transactional(propagation = Propagation.SUPPORTS)
     public JdbcTemplate getJdbcTemplate() {
         return (JdbcTemplate) namedParameterJdbcTemplate.getJdbcOperations();
     }
@@ -49,68 +52,46 @@ public class EnhancedJpaRepository<T, ID extends Serializable> extends SimpleJpa
         return entityManager;
     }
 
-    public static <T> Specification<T> eq(SingularAttribute<T, ?> attr, Object value) {
-        return isNullOrEmpty(value) ? null : (root, query, cb) -> cb.equal(root.get(attr), value);
-    }
-
-    public static <T> Specification<T> in(SingularAttribute<T, ?> attr, Collection<?> values) {
-        if (isNullOrEmpty(values)) {
-            return null;
+    @Transactional
+    public int batchDeleteByIds(Iterable<ID> ids) {
+        if (ids == null || !ids.iterator().hasNext()) {
+            return 0;
         }
-        return (root, query, cb) -> {
-            Path<?> expression = root.get(attr);
-            return cb.in(expression).in(values);
-        };
-    }
-
-    public static <T, Y extends Comparable<? super Y>> Specification<T> lt(SingularAttribute<T, Y> attr, Y value) {
-        return isNullOrEmpty(value) ? null : (root, query, cb) -> cb.lessThan(root.get(attr), value);
-    }
-
-    public static <T, Y extends Comparable<? super Y>> Specification<T> lte(SingularAttribute<T, Y> attr, Y value) {
-        return isNullOrEmpty(value) ? null : (root, query, cb) -> cb.lessThanOrEqualTo(root.get(attr), value);
-    }
-
-    public static <T, Y extends Comparable<? super Y>> Specification<T> gt(SingularAttribute<T, Y> attr, Y value) {
-        return isNullOrEmpty(value) ? null : (root, query, cb) -> cb.greaterThan(root.get(attr), value);
-    }
-
-    public static <T, Y extends Comparable<? super Y>> Specification<T> gte(SingularAttribute<T, Y> attr, Y value) {
-        return isNullOrEmpty(value) ? null : (root, query, cb) -> cb.greaterThanOrEqualTo(root.get(attr), value);
-    }
-
-    public static <T, Y extends Comparable<? super Y>> Specification<T> between(SingularAttribute<T, Y> attr, Y from, Y to) {
-        if (from == null) {
-            return lte(attr, to);
+        int size = 0;
+        for (List<ID> partIds : Query2.partitionForQuery(ids)) {
+            size += deleteByIds(partIds);
         }
-        if (to == null) {
-            return gte(attr, from);
+        return size;
+    }
+
+    @Transactional
+    public void update(T entity) {
+        Session session = entityManager.unwrap(Session.class);
+        session.update(entity);
+    }
+
+    @Transactional
+    public void update(Iterable<T> entities) {
+        Session session = entityManager.unwrap(Session.class);
+        for (T e : entities) {
+            session.update(e);
         }
-        return (root, query, cb) -> cb.between(root.get(attr), from, to);
+    }
+
+    private int deleteByIds(List<ID> ids) {
+        if (entityInformation.hasCompositeId()) {
+            throw new UnsupportedOperationException("composite id is unsupported");
+        }
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+
+        CriteriaDelete<T> delete = cb.createCriteriaDelete(getDomainClass());
+        Root<T> from = delete.from(getDomainClass());
+
+        Predicate predicate = from.get(entityInformation.getIdAttribute()).in(exp(cb, ids));
+        return entityManager.createQuery(delete.where(predicate)).executeUpdate();
     }
 
     // --- 以下是 JPA 查询的 Join 写法
-
-    public static <T, J> Specification<T> eq(SingularAttribute<T, J> joinAttr, SingularAttribute<J, ?> attr, Object value) {
-        return isNullOrEmpty(value) ? null : (root, query, cb) -> cb.equal(root.join(joinAttr, JoinType.LEFT).get(attr), value);
-    }
-
-    public static <T, J> Specification<T> lt(SingularAttribute<T, J> joinAttr,
-                                      SingularAttribute<J, ? extends Number> attr, Number value) {
-        return isNullOrEmpty(value) ? null : (root, query, cb) -> cb.lt(root.join(joinAttr, JoinType.LEFT).get(attr), value);
-    }
-
-    public static <T, Y extends Comparable<? super Y>> Specification<T> le(SingularAttribute<T, Y> attr, Y value) {
-        return isNullOrEmpty(value) ? null : (root, query, cb) -> cb.lessThanOrEqualTo(root.get(attr), value);
-    }
-
-    public static boolean isNullOrEmpty(Collection<?> collection) {
-        return collection == null || collection.isEmpty();
-    }
-
-    public static boolean isNullOrEmpty(Object obj) {
-        return obj == null || obj instanceof String && ((String) obj).isEmpty();
-    }
 
     private DataSource getDataSource(EntityManager entityManager) {
         SessionFactoryImpl sf = entityManager.getEntityManagerFactory().unwrap(SessionFactoryImpl.class);

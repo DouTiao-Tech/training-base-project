@@ -12,8 +12,8 @@ import com.darcytech.training.core.base.BaseJpaRepository;
 import com.darcytech.training.core.node.model.ActionRecord;
 import com.darcytech.training.core.node.model.ActionRecord_;
 
-import static com.darcytech.training.core.base.EnhancedJpaRepository.eq;
-import static com.darcytech.training.core.base.EnhancedJpaRepository.gt;
+import static com.darcytech.training.core.base.BaseJpaRepository.eq;
+import static com.darcytech.training.core.base.BaseJpaRepository.gt;
 import static com.darcytech.training.core.node.dao.ActionRecordDaos.marketingOrderResultExists;
 
 @Transactional(readOnly = true)

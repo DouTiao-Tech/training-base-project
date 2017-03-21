@@ -22,6 +22,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import com.darcytech.training.core.base.DataSourceRouter;
 import com.darcytech.training.core.base.EnhancedJpaRepository;
+import com.darcytech.training.core.base.EnhancedJpaRepositoryFactoryBean;
 import com.darcytech.training.core.catalog.CatalogRepositoryConfig;
 import com.darcytech.training.core.catalog.model.Server;
 import com.darcytech.training.core.node.model.Trade;
@@ -31,7 +32,8 @@ import com.darcytech.training.core.node.model.Trade;
 @EnableJpaRepositories(
         entityManagerFactoryRef = "nodeEntityManagerFactory",
         transactionManagerRef = NodeRepositoryConfig.TX_MANAGER_NAME,
-        repositoryBaseClass = EnhancedJpaRepository.class
+        repositoryBaseClass = EnhancedJpaRepository.class,
+        repositoryFactoryBeanClass = EnhancedJpaRepositoryFactoryBean.class
 )
 public class NodeRepositoryConfig {
 

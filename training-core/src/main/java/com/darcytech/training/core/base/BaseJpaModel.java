@@ -18,8 +18,7 @@ public abstract class BaseJpaModel<ID> {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass().isAssignableFrom(o.getClass()) == false
-                && o.getClass().isAssignableFrom(getClass()) == false) {
+        if (o == null || !getClass().isAssignableFrom(o.getClass()) && !o.getClass().isAssignableFrom(getClass())) {
             return false;
         }
         BaseJpaModel<?> baseModel = (BaseJpaModel<?>) o;

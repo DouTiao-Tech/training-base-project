@@ -1,5 +1,6 @@
 package com.darcytech.training.core.catalog.dao;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -14,4 +15,5 @@ public interface ItemOrderDao extends BaseJpaRepository<ItemOrder, Long> {
         return getJdbcTemplate().queryForList("select payment from item_order where payment < ?", Integer.class, payment);
     }
 
+    List<ItemOrder> findByIidIn(Collection<Long> iids);
 }
